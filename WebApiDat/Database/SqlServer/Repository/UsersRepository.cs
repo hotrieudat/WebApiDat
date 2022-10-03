@@ -1,4 +1,4 @@
-﻿using WebApiDat.Data.Client;
+﻿using WebApiDat.Data.Response;
 using WebApiDat.Data.Model;
 using WebApiDat.Database.Domain;
 using WebApiDat.Database.SqlServer.Entity;
@@ -17,7 +17,7 @@ namespace WebApiDat.Database.SqlServer.Repository
             Context = context;
         }
 
-        public UsersClient AddUser(UsersModel usersModel)
+        public UsersResponse AddUser(UsersModel usersModel)
         {
             var user = new UsersEntity
             {
@@ -29,7 +29,7 @@ namespace WebApiDat.Database.SqlServer.Repository
             Context.UsersEntity.Add(user);
             Context.SaveChanges();
 
-            return new UsersClient
+            return new UsersResponse
             {
                 UserName = usersModel.UserName,
             };
@@ -46,9 +46,9 @@ namespace WebApiDat.Database.SqlServer.Repository
             } 
         }
 
-        public List<UsersClient> GetAllUser()
+        public List<UsersResponse> GetAllUser()
         {
-            var users = Context.UsersEntity.Select(user => new UsersClient
+            var users = Context.UsersEntity.Select(user => new UsersResponse
             {
                 UserName = user.UserName
             }).ToList();
@@ -56,13 +56,13 @@ namespace WebApiDat.Database.SqlServer.Repository
             return users;
         }
 
-        public UsersClient GetUserById(string name)
+        public UsersResponse GetUserById(string name)
         {
             var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == name);
 
             if (user != null)
             {
-                return new UsersClient
+                return new UsersResponse
                 {
                     UserName = user.UserName,
                 };

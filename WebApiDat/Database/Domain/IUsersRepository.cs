@@ -1,4 +1,4 @@
-﻿using WebApiDat.Data.Client;
+﻿using WebApiDat.Data.Response;
 using WebApiDat.Data.Model;
 using System.Collections.Generic;
 
@@ -7,11 +7,11 @@ namespace WebApiDat.Database.Domain
 {
     public interface IUsersRepository
     {
-        List<UsersClient> GetAllUser();
+        List<UsersResponse> GetAllUser();
 
-        UsersClient GetUserById(string id);
+        UsersResponse GetUserById(string id);
 
-        UsersClient AddUser(UsersModel usersModel);
+        UsersResponse AddUser(UsersModel usersModel);
 
         void UpdateUser(string id, UsersModel usersModel);
 

@@ -1,7 +1,7 @@
 ﻿
-namespace WebApiDat.Data.Client
+namespace WebApiDat.Data.Response
 {
-    public class UsersClient
+    public class UsersResponse
     {
         public string UserName { get; set; }
     }
