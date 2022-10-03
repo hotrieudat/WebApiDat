@@ -23,6 +23,8 @@ namespace WebApiDat.Database.SqlServer.Repository
             {
                 UserName = usersModel.UserName,
                 LoginPw = usersModel.LoginPw,
+                Name = usersModel.Name,
+                Email = usersModel.Email,
                 UserId = Guid.NewGuid().ToString(),
             };
 
@@ -35,9 +37,9 @@ namespace WebApiDat.Database.SqlServer.Repository
             };
         }
 
-        public void DeleteUser(string id)
+        public void DeleteUser(string username)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserId == id);
+            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == username);
 
             if (user != null)
             {
@@ -50,34 +52,40 @@ namespace WebApiDat.Database.SqlServer.Repository
         {
             var users = Context.UsersEntity.Select(user => new UsersResponse
             {
-                UserName = user.UserName
+                UserName = user.UserName,
+                Name = user.Name,
+                Email = user.Email,
+                
             }).ToList();
 
             return users;
         }
 
-        public UsersResponse GetUserById(string name)
+        public UsersResponse GetUserByUsername(string userName)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == name);
+            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == userName);
 
             if (user != null)
             {
                 return new UsersResponse
                 {
                     UserName = user.UserName,
+                    Name = user.Name,
+                    Email = user.Email,
                 };
             }
 
             return null;
         }
 
-        public void UpdateUser(string id, UsersModel usersModel)
+        public void UpdateUser(string userName, UsersModel usersModel)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserId == id);
+            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == userName);
 
             user.UserName = usersModel.UserName;
-
             user.LoginPw = usersModel.LoginPw;
+            user.Name = usersModel.Name;
+            user.Email = usersModel.Email;
 
             Context.SaveChanges();
         }

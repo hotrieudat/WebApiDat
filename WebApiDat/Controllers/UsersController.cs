@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiDat.Data.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApiDat.Controllers
 {
@@ -16,6 +17,7 @@ namespace WebApiDat.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllUser()
         {
             try
@@ -33,7 +35,7 @@ namespace WebApiDat.Controllers
         {
             try
             {
-                var data = UsersRepository.GetUserById(name);
+                var data = UsersRepository.GetUserByUsername(name);
 
                 if (data != null)
                 {
@@ -47,12 +49,12 @@ namespace WebApiDat.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(string id, UsersModel usersModel)
+        [HttpPut("{userName}")]
+        public IActionResult UpdateUser(string userName, UsersModel usersModel)
         {
             try
             {
-                UsersRepository.UpdateUser(id, usersModel);
+                UsersRepository.UpdateUser(userName, usersModel);
                 return NoContent();
             }
             catch
@@ -61,12 +63,12 @@ namespace WebApiDat.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteUser(string id)
+        [HttpDelete("{userName}")]
+        public IActionResult DeleteUser(string userName)
         {
             try
             {
-                UsersRepository.DeleteUser(id);
+                UsersRepository.DeleteUser(userName);
                 return NoContent();
             }
             catch

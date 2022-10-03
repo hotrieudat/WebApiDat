@@ -9,7 +9,7 @@ namespace WebApiDat.Database.Domain
     {
         List<UsersResponse> GetAllUser();
 
-        UsersResponse GetUserById(string id);
+        UsersResponse GetUserByUsername(string username);
 
         UsersResponse AddUser(UsersModel usersModel);
 

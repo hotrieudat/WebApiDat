@@ -22,5 +22,13 @@ namespace WebApiDat.Database.SqlServer.Entity
         [Required]
         [Column("login_pw")]
         public string LoginPw { get; set; }
+
+        [Required]
+        [Column("email")]
+        public string Email { get; set; }
+
+        [Required]
+        [Column("name")]
+        public string Name { get; set; }
     }
 }
