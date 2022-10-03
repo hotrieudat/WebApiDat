@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiDat.Database.SqlServer;
 
 namespace WebApiDat.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221003072619_Create_refeshToken_table")]
+    partial class Create_refeshToken_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,17 +27,11 @@ namespace WebApiDat.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("ExpiredAt")
+                    b.Property<DateTime>("ExpriredAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsRevoked")
+                    b.Property<bool>("IsRevokrd")
                         .HasColumnType("bit");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("IssuedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(max)");
@@ -44,6 +40,7 @@ namespace WebApiDat.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -86,11 +83,13 @@ namespace WebApiDat.Migrations
 
             modelBuilder.Entity("WebApiDat.Database.SqlServer.Entity.RefreshTokenEntity", b =>
                 {
-                    b.HasOne("WebApiDat.Database.SqlServer.Entity.UsersEntity", "UsersEntity")
+                    b.HasOne("WebApiDat.Database.SqlServer.Entity.UsersEntity", "Users")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UsersEntity");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

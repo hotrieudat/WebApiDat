@@ -8,5 +8,7 @@ namespace WebApiDat.Database.SqlServer
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 
         public DbSet<UsersEntity> UsersEntity { get; set; }
+
+        public DbSet<RefreshTokenEntity> RefreshTokenEntity { get; set; }
     }
 }

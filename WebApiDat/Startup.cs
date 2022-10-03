@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using WebApiDat.Database.Domain;
 using WebApiDat.Database.SqlServer;
 using WebApiDat.Database.SqlServer.Repository;
+using WebApiDat.Service.Token;
 using WebApiDat.Setting;
 
 namespace WebApiDat
@@ -39,6 +40,7 @@ namespace WebApiDat
             });
 
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<TokenService>();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
