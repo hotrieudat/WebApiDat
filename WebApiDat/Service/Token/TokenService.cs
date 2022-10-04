@@ -4,22 +4,22 @@ using System.Security.Claims;
 using System.Text;
 using System;
 using WebApiDat.Database.SqlServer.Entity;
-using WebApiDat.Setting;
 using WebApiDat.Data.Model;
 using System.Security.Cryptography;
-using WebApiDat.Database.SqlServer;
-using System.Threading.Tasks;
+using WebApiDat.Database.Domain;
 
 namespace WebApiDat.Service.Token
 {
     public class TokenService
     {
-        private readonly MyDbContext Context;
-        public TokenService(MyDbContext context) 
+        private IRefreshTokenRepository RefreshTokenRepository;
+
+        public TokenService(IRefreshTokenRepository refreshTokenRepository) 
         {
-            Context = context;
+            RefreshTokenRepository = refreshTokenRepository;
         }
-        public async Task<TokenModel> GenerateToken(UsersEntity usersEntity, string secretKey)
+
+        public TokenModel GenerateToken(UsersEntity usersEntity, string secretKey)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
@@ -39,7 +39,7 @@ namespace WebApiDat.Service.Token
 
                     //new Claim("TokenId", Guid.NewGuid().ToString()),
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(20),
+                Expires = DateTime.UtcNow.AddSeconds(120),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature),
             };
 
@@ -50,20 +50,15 @@ namespace WebApiDat.Service.Token
             var refreshToken = GenerateRefeshToken();
 
             //save database
-            var refreshTokenEntity = new RefreshTokenEntity
-            {
-                Id = Guid.NewGuid(),
-                JwtId = token.Id,
-                UserId = usersEntity.UserId,
-                Token = refreshToken,
-                IsUsed = false,
-                IsRevoked = false,
-                IssuedAt = DateTime.UtcNow,
-                ExpiredAt = DateTime.UtcNow.AddMinutes(3),
-            };
-
-            await Context.RefreshTokenEntity.AddAsync(refreshTokenEntity);
-            await Context.SaveChangesAsync();
+            RefreshTokenRepository.Save(
+                Guid.NewGuid(),
+                usersEntity.UserId,
+                refreshToken,
+                token.Id,
+                false,
+                false,
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddMinutes(3));
 
             return new TokenModel
             {

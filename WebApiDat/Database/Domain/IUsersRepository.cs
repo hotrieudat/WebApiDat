@@ -1,7 +1,8 @@
 ﻿using WebApiDat.Data.Response;
 using WebApiDat.Data.Model;
 using System.Collections.Generic;
-
+using WebApiDat.Database.SqlServer.Entity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace WebApiDat.Database.Domain
 {
@@ -16,5 +17,7 @@ namespace WebApiDat.Database.Domain
         void UpdateUser(string id, UsersModel usersModel);
 
         void DeleteUser(string id);
+
+        UsersEntity ValidateUser(string username, string password);
     }
 }

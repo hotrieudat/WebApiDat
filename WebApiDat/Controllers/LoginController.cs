@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiDat.Data.Model;
 using WebApiDat.Data.Response;
+using WebApiDat.Database.Domain;
 using WebApiDat.Database.SqlServer;
-using WebApiDat.Database.SqlServer.Entity;
 using WebApiDat.Service.Token;
 using WebApiDat.Setting;
 
@@ -25,18 +23,20 @@ namespace WebApiDat.Controllers
         private readonly MyDbContext Context;
         private readonly AppSettings AppSettings;
         private readonly TokenService TokenService;
+        private readonly IUsersRepository UsersRepository;
 
-        public LoginController(MyDbContext context, IOptionsMonitor<AppSettings> optionsMonitor, TokenService tokenService)
+        public LoginController(MyDbContext context, IUsersRepository usersRepository, IOptionsMonitor<AppSettings> optionsMonitor, TokenService tokenService)
         {
             Context = context;
+            UsersRepository = usersRepository;
             AppSettings = optionsMonitor.CurrentValue;
             TokenService = tokenService;
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Validate(LoginModel loginModel)
+        public IActionResult Validate(LoginModel loginModel)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == loginModel.UserName && u.LoginPw == loginModel.LoginPw);
+            var user = UsersRepository.ValidateUser(loginModel.UserName, loginModel.LoginPw);
 
             if (user == null)
             {
@@ -48,7 +48,7 @@ namespace WebApiDat.Controllers
             }
 
             //Token
-            var token = await TokenService.GenerateToken(user, AppSettings.SecretKey);
+            var token = TokenService.GenerateToken(user, AppSettings.SecretKey);
 
             return Ok(new ApiResponse
             {
@@ -161,7 +161,7 @@ namespace WebApiDat.Controllers
 
                 //create new token
                 var user = await Context.UsersEntity.SingleOrDefaultAsync(u => u.UserId == storedToken.UserId);
-                var token = await TokenService.GenerateToken(user, AppSettings.SecretKey);
+                var token = TokenService.GenerateToken(user, AppSettings.SecretKey);
 
                 return Ok(new ApiResponse
                 {

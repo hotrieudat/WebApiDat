@@ -40,6 +40,7 @@ namespace WebApiDat
             });
 
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<TokenService>();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));

@@ -89,5 +89,10 @@ namespace WebApiDat.Database.SqlServer.Repository
 
             Context.SaveChanges();
         }
+
+        public UsersEntity ValidateUser(string username, string password)
+        {
+            return Context.UsersEntity.SingleOrDefault(u => u.UserName == username && u.LoginPw == password);
+        }
     }
 }
