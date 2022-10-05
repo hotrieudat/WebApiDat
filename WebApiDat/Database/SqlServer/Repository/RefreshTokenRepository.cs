@@ -4,12 +4,12 @@ using WebApiDat.Database.SqlServer.Entity;
 
 namespace WebApiDat.Database.SqlServer.Repository
 {
-    public class RefreshTokenRepository : IRefreshTokenRepository
+    public class RefreshTokenRepository : Repository<RefreshTokenEntity>, IRefreshTokenRepository
     {
-        private readonly MyDbContext Context;
-        public RefreshTokenRepository(MyDbContext context)
+        private readonly MyDbContext myContext;
+        public RefreshTokenRepository(MyDbContext context) : base(context)
         {
-            Context = context;
+            myContext = context;
         }
 
         public void Save(Guid id, string userId, string token, string jwtId, bool isUsed, bool isRevoked, DateTime issuedAt, DateTime expiredAt)
@@ -26,8 +26,8 @@ namespace WebApiDat.Database.SqlServer.Repository
                 ExpiredAt = expiredAt,
             };
 
-            Context.RefreshTokenEntity.Add(refreshTokenEntity);
-            Context.SaveChanges();
+            myContext.RefreshTokenEntity.Add(refreshTokenEntity);
+            myContext.SaveChanges();
         }
     }
 }

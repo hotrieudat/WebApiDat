@@ -1,9 +1,10 @@
 ﻿using System;
 using WebApiDat.Database.SqlServer.Entity;
+using WebApiDat.Database.SqlServer.Repository;
 
 namespace WebApiDat.Database.Domain
 {
-    public interface IRefreshTokenRepository
+    public interface IRefreshTokenRepository : IRepository<RefreshTokenEntity>
     {
         void Save(
             Guid Id,

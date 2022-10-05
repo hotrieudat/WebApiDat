@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace WebApiDat.Database.Domain
 {
-    public interface IUsersRepository
+    public interface IUsersRepository : IRepository<UsersEntity>
     {
         List<UsersResponse> GetAllUser();
 

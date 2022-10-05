@@ -9,12 +9,12 @@ using System;
 namespace WebApiDat.Database.SqlServer.Repository
 {
 
-    public class UsersRepository : IUsersRepository
+    public class UsersRepository : Repository<UsersEntity>, IUsersRepository
     {
-        private readonly MyDbContext Context;
-        public UsersRepository(MyDbContext context)
+        private readonly MyDbContext myContext;
+        public UsersRepository(MyDbContext context) : base(context)
         {
-            Context = context;
+            myContext = context;
         }
 
         public UsersResponse AddUser(UsersModel usersModel)
@@ -28,8 +28,8 @@ namespace WebApiDat.Database.SqlServer.Repository
                 UserId = Guid.NewGuid().ToString(),
             };
 
-            Context.UsersEntity.Add(user);
-            Context.SaveChanges();
+            myContext.UsersEntity.Add(user);
+            myContext.SaveChanges();
 
             return new UsersResponse
             {
@@ -39,18 +39,18 @@ namespace WebApiDat.Database.SqlServer.Repository
 
         public void DeleteUser(string username)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == username);
+            var user = myContext.UsersEntity.SingleOrDefault(u => u.UserName == username);
 
             if (user != null)
             {
-                Context.UsersEntity.Remove(user);
-                Context.SaveChanges();
+                myContext.UsersEntity.Remove(user);
+                myContext.SaveChanges();
             } 
         }
 
         public List<UsersResponse> GetAllUser()
         {
-            var users = Context.UsersEntity.Select(user => new UsersResponse
+            var users = myContext.UsersEntity.Select(user => new UsersResponse
             {
                 UserName = user.UserName,
                 Name = user.Name,
@@ -63,7 +63,7 @@ namespace WebApiDat.Database.SqlServer.Repository
 
         public UsersResponse GetUserByUsername(string userName)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == userName);
+            var user = myContext.UsersEntity.SingleOrDefault(u => u.UserName == userName);
 
             if (user != null)
             {
@@ -80,19 +80,19 @@ namespace WebApiDat.Database.SqlServer.Repository
 
         public void UpdateUser(string userName, UsersModel usersModel)
         {
-            var user = Context.UsersEntity.SingleOrDefault(u => u.UserName == userName);
+            var user = myContext.UsersEntity.SingleOrDefault(u => u.UserName == userName);
 
             user.UserName = usersModel.UserName;
             user.LoginPw = usersModel.LoginPw;
             user.Name = usersModel.Name;
             user.Email = usersModel.Email;
 
-            Context.SaveChanges();
+            myContext.SaveChanges();
         }
 
         public UsersEntity ValidateUser(string username, string password)
         {
-            return Context.UsersEntity.SingleOrDefault(u => u.UserName == username && u.LoginPw == password);
+            return myContext.UsersEntity.SingleOrDefault(u => u.UserName == username && u.LoginPw == password);
         }
     }
 }
