@@ -13,22 +13,22 @@ namespace WebApiDat.Database.SqlServer.Entity
     {
         [Key]
         [Column("user_id")]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = null!;
 
         [Required]
         [Column("user_name")]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
         [Required]
         [Column("login_pw")]
-        public string LoginPw { get; set; }
+        public string LoginPw { get; set; } = null!;
 
         [Required]
         [Column("email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required]
         [Column("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

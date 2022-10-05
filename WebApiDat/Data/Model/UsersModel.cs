@@ -6,12 +6,12 @@ namespace WebApiDat.Data.Model
 {
     public class UsersModel
     {
-        public string UserName { get; set; }
+        public string UserName { get; set; } = null!;
 
-        public string LoginPw { get; set; }
+        public string LoginPw { get; set; } = null!;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

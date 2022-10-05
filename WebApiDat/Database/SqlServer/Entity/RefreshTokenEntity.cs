@@ -9,14 +9,18 @@ namespace WebApiDat.Database.SqlServer.Entity
     {
         [Key]
         public Guid Id { get; set; }
-        public string UserId { get; set; }
+
+        [Required]
+        public string UserId { get; set; } = null!;
 
         [ForeignKey(nameof(UserId))]
-        public UsersEntity UsersEntity { get; set; }
+        public UsersEntity? UsersEntity { get; set; }
 
-        public string Token { get; set; }
+        [Required]
+        public string Token { get; set; } = null!;
 
-        public string JwtId { get; set; }
+        [Required]
+        public string JwtId { get; set; } = null!;
 
         public bool IsUsed { get; set; }
 
