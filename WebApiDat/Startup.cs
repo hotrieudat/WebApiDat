@@ -19,7 +19,6 @@ using WebApiDat.Database.Domain;
 using WebApiDat.Database.SqlServer;
 using WebApiDat.Database.SqlServer.Repository;
 using WebApiDat.Service.Token;
-using WebApiDat.Setting;
 
 namespace WebApiDat
 {

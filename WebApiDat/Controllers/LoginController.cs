@@ -12,7 +12,6 @@ using WebApiDat.Data.Response;
 using WebApiDat.Database.Domain;
 using WebApiDat.Database.SqlServer;
 using WebApiDat.Service.Token;
-using WebApiDat.Setting;
 
 namespace WebApiDat.Controllers
 {
