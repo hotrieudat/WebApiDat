@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 using WebApiDat;
 using WebApiDat.Database.Domain;
@@ -15,6 +16,14 @@ var configuration = builder.Configuration;
 builder.Services.AddDbContext<MyDbContext>(options => {
     options.UseSqlServer(configuration.GetConnectionString("MyDb"));
 });
+
+// Add services to the container.
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();

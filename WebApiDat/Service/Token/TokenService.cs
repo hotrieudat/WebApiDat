@@ -7,15 +7,19 @@ using WebApiDat.Database.SqlServer.Entity;
 using WebApiDat.Data.Model;
 using System.Security.Cryptography;
 using WebApiDat.Database.Domain;
+using WebApiDat.Database.SqlServer.Repository;
 
 namespace WebApiDat.Service.Token
 {
     public class TokenService
     {
+        private readonly ILogger<RefreshTokenRepository> Logger;
+
         private IRefreshTokenRepository RefreshTokenRepository;
 
-        public TokenService(IRefreshTokenRepository refreshTokenRepository) 
+        public TokenService(ILogger<RefreshTokenRepository> logger, IRefreshTokenRepository refreshTokenRepository) 
         {
+            Logger = logger;
             RefreshTokenRepository = refreshTokenRepository;
         }
 
@@ -60,6 +64,7 @@ namespace WebApiDat.Service.Token
                 DateTime.UtcNow,
                 DateTime.UtcNow.AddMinutes(3));
 
+            Logger.LogInformation("Generate Token Success!!!");
             return new TokenModel
             {
                 AccessToken = accessToken,

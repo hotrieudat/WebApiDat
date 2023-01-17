@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiDat.Database.SqlServer;
 
+#nullable disable
+
 namespace WebApiDat.Migrations
 {
     [DbContext(typeof(MyDbContext))]
@@ -15,9 +17,10 @@ namespace WebApiDat.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("WebApiDat.Database.SqlServer.Entity.RefreshTokenEntity", b =>
                 {
@@ -38,12 +41,15 @@ namespace WebApiDat.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("JwtId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -88,7 +94,9 @@ namespace WebApiDat.Migrations
                 {
                     b.HasOne("WebApiDat.Database.SqlServer.Entity.UsersEntity", "UsersEntity")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UsersEntity");
                 });
